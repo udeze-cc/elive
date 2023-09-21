@@ -205,7 +205,7 @@ function ResultForm(props) {
       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'row' }}>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4} md={3}>
-            <Typography variant="h6" sx={{ marginTop: 2, fontWeight: 'bold' }}>{description}</Typography>
+            <Typography variant="h6" sx={{ marginTop: 2, fontWeight: 'bold' }}>{description}</Typography> 
           </Grid>
           <Grid item xs={12} sm={6} md={7}>
             <TextField

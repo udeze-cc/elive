@@ -6,6 +6,7 @@ import amplifyConfig from './aws-exports';
 import HomeDashboard from './home';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import HomeIcon from '@mui/icons-material/Home';
+
 // import { useNavigate } from 'react-router-dom';  
 
 Amplify.configure(amplifyConfig);
@@ -48,11 +49,11 @@ function App({ signOut, user }) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               E-lections
             </Typography>
-            <Typography variant="subtitle1" component="span" sx={{ marginRight: 2 }}>
-              {user.attributes.name} 
+            <Typography variant="name" component="span" sx={{ marginRight: 2 }}>
+              {user.attributes.family_name} 
             </Typography>
-
-            <Button onClick={signOut} color="inherit">Sign Out</Button>
+            <a style={{textDecoration: "none", color: "inherit", marginRight: 10 }} href={`/dashboard`}>Account</a>
+            <Button textTransform='none' textDecoration="none" onClick={signOut} color="inherit">Sign Out</Button>
           </Toolbar>
         </AppBar>
         
