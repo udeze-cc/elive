@@ -9,6 +9,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -230,6 +231,14 @@ function AdminPage() {
                     </ListItem>
                 ))}
             </List>
+            <Divider />
+            <ListItem disablePadding>
+                <ListItemButton >
+                    <ListItemIcon>
+                    </ListItemIcon>
+                    <ListItemText primary="Sign Out" />
+                </ListItemButton>
+            </ListItem>
         </Drawer>
     </Box>
     </Box>
