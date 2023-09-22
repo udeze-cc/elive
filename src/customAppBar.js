@@ -1,36 +1,35 @@
-import React, { useState } from 'react';  // <-- Import useState
+import React, { useState } from 'react';  
 import { 
   Box, AppBar, Toolbar, IconButton, Typography, 
-  Button, Menu, MenuItem, FormControl, InputAdornment 
+  Button, Menu, MenuItem, FormControl, InputAdornment, TextField
 } from '@mui/material';
 import { Amplify } from 'aws-amplify';
 import { Auth } from 'aws-amplify';
 import amplifyConfig from './aws-exports';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import HomeIcon from '@mui/icons-material/Home';
-import SearchIcon from '@mui/icons-material/Search';  // <-- Import this
+import SearchIcon from '@mui/icons-material/Search'; 
 import { useNavigate } from 'react-router-dom';
 
 
 Amplify.configure(amplifyConfig);
 
-const handleSignOut = async () => {
-  try {
-      await Auth.signOut();
-      window.location.reload(); // Reload or redirect to the sign-in page if needed
-  } catch (error) {
-      console.error("Error signing out: ", error);
-  }
-};
-
-
-function CustomAppBar({ signOut, user }) {
+function CustomAppBar({ signOut, user, onSearchIconClick }) {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const goBack = () => {
     navigate(-1); // Go back by one entry in the history stack
-}
+  }
 
+  const handleSignOut = async () => {
+    try {
+        await Auth.signOut();
+        window.location.reload(); // Reload or redirect to the sign-in page if needed
+    } catch (error) {
+        console.error("Error signing out: ", error);
+    }
+  };
+  
   const handleMenuOpen = (event) => {
       setAnchorEl(event.currentTarget);
   };
@@ -77,24 +76,32 @@ function CustomAppBar({ signOut, user }) {
             e-lections
           </Typography>
             
-            <FormControl variant="outlined" style={{ marginBottom: '20px' }}>
-                <InputAdornment position="start">
+          <FormControl variant="outlined" sx={{ marginRight: '10px' }}>
+            <TextField
+              variant="outlined"
+              placeholder="Search..."
+              style={{  width: '8em', borderRadius: '15px', backgroundColor: 'ghostwhite'}}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
                     <IconButton
-                        onClick={toggleSearchOptions}
-                        aria-label="Toggle search options"
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            padding: '5px',
-                        }}
+                      onClick={() => {
+                        onSearchIconClick && onSearchIconClick();
+                        toggleSearchOptions(); 
+                      }}
+                      aria-label="Toggle search options"
                     >
-                        <SearchIcon style={{ fontSize: '18px' }} />
+                        <SearchIcon />
                     </IconButton>
-                </InputAdornment>
-            </FormControl>
-            <Button color="inherit" onClick={handleMenuOpen}>
-              {user?.attributes?.family_name}
+                  </InputAdornment>
+                  ),
+                }}
+              />
+          </FormControl>
+
+            <Button    
+              variant='subtitle1' color="inherit" onClick={handleMenuOpen}>
+              {user?.family_name}
             </Button>
             
           </Toolbar>

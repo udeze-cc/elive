@@ -1,5 +1,5 @@
 import { Typography, Grid, FormControl, InputAdornment, FormControlLabel, FormLabel, Radio, RadioGroup, Select, MenuItem } from "@mui/material";
-import "./../App.css";
+import "../App.css";
 import React, { useState, useEffect } from 'react';
 import {
     PieChart, Pie, Cell,
@@ -26,7 +26,7 @@ const Card = ({ children }) => (
     </Box>
 );
 
-function HomeScreen() {
+function HomeDashboard() {
 
     const [currentState, setCurrentState] = useState(0); // selected index for state
     const [currentLga, setCurrentLga] = useState(0);     // selected index for lga
@@ -398,4 +398,4 @@ function HomeScreen() {
     );
 }
 
-export default HomeScreen;
+export default HomeDashboard;
