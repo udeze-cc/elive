@@ -235,7 +235,6 @@ function Home() {
               E-lections
               </Typography>
               <a style={{color: "red", textDecoration: "none", color: "white"}} href={`/dashboard`}>Account</a>
-              {/* <Button onClick={navigateTo} color="inherit">Account</Button> */}
               <IconButton
                 onClick={toggleSearchOptions}
                 aria-label="Toggle search options"

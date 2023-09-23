@@ -23,13 +23,6 @@ const getUsers = async () => {
   return response.json();
 } 
 
-const userData = [
-  { id: 1010, name: 'Uche', registered: '9/21/2023, 1:34:31 PM' },
-  { id: 1011, name: 'Tolu', registered: '9/21/2023, 1:34:31 PM' },
-  { id: 1012, name: 'Zainab', registered: '9/21/2023, 1:34:31 PM' },
-  { id: 1013, name: 'Tolu', registered: '9/21/2023, 1:34:31 PM' }
-];
-
 function DataTable(props) {
     const [access, setAccess] = useState(false)
     const handleUpdateRole = (userId) => {
