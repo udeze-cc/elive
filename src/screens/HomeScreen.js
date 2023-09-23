@@ -26,7 +26,7 @@ const Card = ({ children }) => (
     </Box>
 );
 
-function HomeDashboard() {
+function HomeScreen() {
 
     const [currentState, setCurrentState] = useState(0); // selected index for state
     const [currentLga, setCurrentLga] = useState(0);     // selected index for lga
@@ -398,4 +398,4 @@ function HomeDashboard() {
     );
 }
 
-export default HomeDashboard;
+export default HomeScreen;
