@@ -234,19 +234,12 @@ function Home() {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               E-lections
               </Typography>
-              <a style={{color: "red", textDecoration: "none", color: "white"}} href={`/dashboard`}>Account</a>
-              <IconButton
+                <SearchIcon 
                 onClick={toggleSearchOptions}
                 aria-label="Toggle search options"
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    padding: '5px',
-                }}
-              >
-                <SearchIcon style={{ fontSize: '18px' }} />
-              </IconButton>
+                sx={{ fontSize: '18px', color: 'white', transition: 'color 0.3s ease','&:hover': { color: 'gray' }, marginRight: 2, marginTop: 1 }} 
+                />
+                <a style={{color: "red", textDecoration: "none", color: "white"}} href={`/dashboard`}>Account</a>
           </Toolbar>
         </AppBar>
         <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'justify', padding: '20px' }}>
