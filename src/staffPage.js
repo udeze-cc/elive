@@ -6,10 +6,26 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import EditIcon from '@mui/icons-material/Edit';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
-const apiKey = '6YJ1IDez4I3hpEsdqCAWI8fzF6CbtCINx3fRTxEf';
+// const apiKey = '6YJ1IDez4I3hpEsdqCAWI8fzF6CbtCINx3fRTxEf';
 let myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
-myHeaders.append("x-api-key", apiKey);
+// myHeaders.append("x-api-key", apiKey);
+
+const adminEmail = 'udeze.cc@gmail.com';
+
+const updateUser = async (user, admin) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const myRequest = new Request(`https://9656mgkl5a.execute-api.eu-west-2.amazonaws.com/dev/account/update/${admin}`, {
+      body: JSON.stringify(user),
+      method: "PUT",
+      headers: myHeaders,
+      mode: "cors",
+      cache: "default",
+    });
+    await fetch(myRequest);
+} 
 
 const getUsers = async () => {
   const myHeaders = new Headers();
@@ -24,10 +40,34 @@ const getUsers = async () => {
 } 
 
 function DataTable(props) {
-    const [access, setAccess] = useState(false)
-    const handleUpdateRole = (userId) => {
-        console.log("Update Role for user with ID:", userId);
-        // Add logic to update the role
+    const [users, setUsers] = useState([]);
+    if (users.length < 1) {
+        getUsers().then(res => {
+            setUsers(res);
+        });
+    }
+
+    const handleUpdateRole = (user, admin) => {
+        let activated = user.activated && user.activated == 1 ? true : false;
+        if (activated) {
+            // Di-activate user
+            updateUser({email: user.email, activated: 0}, admin)
+            .then(res => {
+                console.log('User updated: ', res);
+                getUsers().then(res => {
+                    setUsers(res);
+                });
+            });
+        } else {
+            // Activate user
+            updateUser({email: user.email, activated: 1}, admin)
+            .then(res => {
+                console.log('User updated: ', res);
+                getUsers().then(res => {
+                    setUsers(res);
+                });
+            });
+        }
     }
     
     const handleAssignUnit = (userId) => {
@@ -47,7 +87,7 @@ function DataTable(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.users.map((user) => (
+                    {users.map((user) => (
                         <TableRow key={user.id}>
                         <TableCell>{user.id}</TableCell>
                         <TableCell>{user.name}</TableCell>
@@ -58,9 +98,10 @@ function DataTable(props) {
                                 variant="contained"
                                 style={{ backgroundColor: "#008080", color: "white" }}  // Teal color
                                 startIcon={<EditIcon />}
-                                onClick={() => handleUpdateRole(user.id)}
+                                disabled = {user.email == adminEmail}
+                                onClick={() => handleUpdateRole(user, adminEmail)}
                             >
-                                {access ? 'Revoke Access' : 'Grant Access' }
+                                {user.activated == 1 ? 'Revoke Access' : 'Grant Access' }
                             </Button>
                             &nbsp;&nbsp;
                             <Button
@@ -68,6 +109,7 @@ function DataTable(props) {
                                 variant="contained"
                                 style={{ backgroundColor: "#00857A", color: "white" }}  // Variation of teal for differentiation
                                 startIcon={<GroupAddIcon />}
+                                disabled = {user.email == adminEmail}
                                 onClick={() => handleAssignUnit(user.id)}
                             >
                                 Assign Unit
@@ -83,16 +125,13 @@ function DataTable(props) {
 
 
 function StaffPage() {
-    const [users, setUsers] = useState([]);
-    if (users.length < 1) {
-        getUsers().then(res => setUsers(res));
-    }
+
   return (
     <div style={{ padding: '40px' }}>
         <Typography variant="h4" gutterBottom>
             Admin Page
         </Typography>
-        <DataTable users={users}/>
+        <DataTable/>
     </div>
   );
 }
