@@ -441,8 +441,4 @@ const previewButton = {
     margin: "1.0em",
   }
   
-  const previewHover = {
-    backgroundColor: "#9A9A9A",
-    color: "white",
-    border: "none",
-  }
+ 
