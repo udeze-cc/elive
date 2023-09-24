@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Grid, Box, Typography, Button, Accordion, 
   AccordionSummary, AccordionDetails} from '@mui/material';
 import { Menu as MenuIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import "./App.css";
 
 
 const enteredOtp = ""; 
@@ -169,43 +170,47 @@ function ResultForm(props) {
   
   function UnitComponent({ unitLabel, nameLabel, idLabel, nameData, idData, onChangeName, onChangeId }) {
     return (
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} sm={4} md={3}>
-          <Typography variant="h6" sx={{ margin: 2, fontWeight: 'bold' }}>{unitLabel}</Typography>
+      // <Box className='result-component'>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={4} md={3}>
+            <Typography variant="h6" className='component-typography'>{unitLabel}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={7}>
+            <TextField fullWidth variant="outlined" label={nameLabel} value={nameData} onChange={e => onChangeName(e.target.value)} sx={{ marginBottom: 2 }} />
+          </Grid>
+          <Grid item xs={12} sm={2} md={2}>
+              <TextField fullWidth variant="outlined" label={idLabel} value={idData} onChange={e => onChangeId(e.target.value)} sx={{ marginBottom: 2 }} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={7}>
-          <TextField fullWidth variant="outlined" label={nameLabel} value={nameData} onChange={e => onChangeName(e.target.value)} sx={{ marginBottom: 2 }} />
-        </Grid>
-        <Grid item xs={12} sm={2} md={2}>
-            <TextField fullWidth variant="outlined" label={idLabel} value={idData} onChange={e => onChangeId(e.target.value)} sx={{ marginBottom: 2 }} />
-        </Grid>
-      </Grid>
+      // </Box>
     );
   }
 
   function ElectionComponent({ electionLabel, nameLabel, idLabel, nameData, idData, onChangeName, onChangeId }) {
     return (
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} sm={4} md={3}>
-          <Typography variant="h6" sx={{ margin: 2, fontWeight: 'bold' }}>{electionLabel}</Typography>
+      // <Box className='result-component'>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={4} md={3}>
+            <Typography variant="h6" className='component-typography'>{electionLabel}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={7}>
+            <TextField fullWidth variant="outlined" label={nameLabel} value={nameData} onChange={e => onChangeName(e.target.value)} sx={{ marginBottom: 2 }} />
+          </Grid>
+          <Grid item xs={12} sm={2} md={2}>
+            <TextField fullWidth variant="outlined" label={idLabel} value={idData} onChange={e => onChangeId(e.target.value)} sx={{ marginBottom: 2 }} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={7}>
-          <TextField fullWidth variant="outlined" label={nameLabel} value={nameData} onChange={e => onChangeName(e.target.value)} sx={{ marginBottom: 2 }} />
-        </Grid>
-        <Grid item xs={12} sm={2} md={2}>
-          <TextField fullWidth variant="outlined" label={idLabel} value={idData} onChange={e => onChangeId(e.target.value)} sx={{ marginBottom: 2 }} />
-        </Grid>
-      </Grid>
+      // </Box>
     );
   }
 
 
   function BallotComponent({ description, wordLabel, figureLabel, wordData, figureData, onWordChange, onFigureChange }) {
     return (
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'row' }}>
-        <Grid container spacing={4}>
+      // <Box className='result-component'>
+        <Grid container spacing={1}>
           <Grid item xs={12} sm={4} md={3}>
-            <Typography variant="h6" sx={{ marginTop: 2, fontWeight: 'bold' }}>{description}</Typography> 
+            <Typography variant="h6" className='component-typography'>{description}</Typography> 
           </Grid>
           <Grid item xs={12} sm={6} md={7}>
             <TextField
@@ -227,20 +232,19 @@ function ResultForm(props) {
               sx={{ marginBottom: 2 }}
             />
           </Grid>
-          </Grid>
-      </Box>
+        </Grid>
+      // </Box>
     );
   }
 
   function VoteComponent({ partyName, partyID, votesFig, votesWords, onInputChange }) {
     return (
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'row', marginBottom: 2 }}>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={6} md={2}>
-            <Typography variant="h6" sx={{ marginTop: 2, fontWeight: 'bold' }}>{partyName}</Typography>
+            <Typography variant="h6" className='component-typography'>{partyName}</Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={1}>
-            <Typography variant="h6" sx={{ marginTop: 2, fontWeight: 'bold' }}>{partyID}</Typography>         
+            <Typography variant="h6" style={voteField}>{partyID}</Typography>         
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
             <TextField fullWidth variant="outlined" label="Votes in Fig" value={votesFig} onChange={e => onInputChange('votesFig', e.target.value)} />
@@ -249,14 +253,13 @@ function ResultForm(props) {
             <TextField fullWidth variant="outlined" label="Votes in Words" value={votesWords} onChange={e => onInputChange('votesWords', e.target.value)} />
           </Grid>
         </Grid>
-      </Box>
     );
   }
 
   function StaffComponent ({nameLabel, idLabel, nameData, idData, onChangeName, onChangeId }) {
 
   }
-
+  
   if (isPreview) {
     return (
       <>
@@ -266,11 +269,11 @@ function ResultForm(props) {
         <Box>{JSON.stringify(voteData)}</Box>
         <Box>{JSON.stringify(staffData)}</Box>
 
-        <Button variant="contained" color="secondary" onClick={handleBackClick}>
+        <Button variant="contained" style={previewButton} onClick={handleBackClick}>
           Back
         </Button>
 
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        <Button variant="contained" style={previewButton} onClick={handleSubmit}>
           Submit
         </Button>
       </>
@@ -279,13 +282,14 @@ function ResultForm(props) {
 
   return (
     <>
-      <Box sx={{ m: 5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
+    <Box className="box">
+      <Box className='resultform-header'>
+        <Typography variant="h4" gutterBottom className='result-header-typo'>
           Unit Result Submission Form
         </Typography>
       </Box>
 
-      <Box sx={{ m: 2 }}>
+      <Box className='component-margin '>
         <UnitComponent
           unitLabel={unitDetail.unitLabel} 
           nameLabel={unitDetail.nameLabel}
@@ -297,7 +301,7 @@ function ResultForm(props) {
         />
       </Box>
 
-      <Box sx={{ m: 2 }}>
+      <Box className='component-margin'>
         <ElectionComponent
           electionLabel={electionDetail.electionLabel} 
           nameLabel={electionDetail.nameLabel}
@@ -309,54 +313,55 @@ function ResultForm(props) {
         />
       </Box>
 
-        <Accordion sx={{ marginBottom: 2 }}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Expand Ballot Details</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-          {ballotDetail.map(detail => (
-            <BallotComponent
-              key={detail.key}
-              description={detail.description}
-              wordLabel={detail.wordLabel}
-              figureLabel={detail.figureLabel}
-              wordData={ballotData[detail.key].word}
-              figureData={ballotData[detail.key].figure}
-              onWordChange={(value) => handleInputChange("ballotData", detail.key, "word", value)}
-              onFigureChange={(value) => handleInputChange("ballotData", detail.key, "figure", value)}
-            />
-          ))}
-          </AccordionDetails>
-        </Accordion>
+      <Accordion className='accordion-margin'>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h5" className='result-header-typo'>Ballot Details</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        {ballotDetail.map(detail => (
+          <BallotComponent
+            key={detail.key}
+            description={detail.description}
+            wordLabel={detail.wordLabel}
+            figureLabel={detail.figureLabel}
+            wordData={ballotData[detail.key].word}
+            figureData={ballotData[detail.key].figure}
+            onWordChange={(value) => handleInputChange("ballotData", detail.key, "word", value)}
+            onFigureChange={(value) => handleInputChange("ballotData", detail.key, "figure", value)}
+          />
+        ))}
+        </AccordionDetails>
+      </Accordion>
 
-        <Accordion sx={{ marginBottom: 2 }}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Votes Summary</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-          {voteDetail.map((detail, index) => (
-            <VoteComponent 
-              key={detail.key} 
-              partyName={detail.partyName}
-              partyID={detail.key}
-              votesFig={voteData[index].votesFig}
-              votesWords={voteData[index].votesWords}
-              onInputChange={(field, value) => handleInputChange("voteData", detail.key, field, value)}
-            />
-          ))}
-          </AccordionDetails>
-        </Accordion>
+      <Accordion className='accordion-margin'>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h5" className='result-header-typo'>Votes Summary</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        {voteDetail.map((detail, index) => (
+          <VoteComponent 
+            key={detail.key} 
+            partyName={detail.partyName}
+            partyID={detail.key}
+            votesFig={voteData[index].votesFig}
+            votesWords={voteData[index].votesWords}
+            onInputChange={(field, value) => handleInputChange("voteData", detail.key, field, value)}
+          />
+        ))}
+        </AccordionDetails>
+      </Accordion>
 
-        <Box>
-          <Box >
-            <Typography variant="h6" sx={{ margin: 2, fontWeight: 'bold' }}>Declaration</Typography>
-          </Box>
+      <Box className='result-component'>
+        <Box >
+          <Typography variant="h6" className='component-typography'>Declaration</Typography>
+        </Box>
 
-        <Box display="flex" flexDirection="column" alignItems="center" mt={3} m={2}>
+        <Box className='declaration'>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={12} sm={1}>
               <Box>I</Box>
             </Grid>
+
             <Grid item xs={12} sm={3}>
               <Box mx={1}>
                 <TextField 
@@ -364,13 +369,14 @@ function ResultForm(props) {
                   name="staffName" 
                   id="staffName" 
                   label="Polling Officer's Name" 
-                  required 
-                />
+                  required />
               </Box>
-              </Grid>
+            </Grid>
+
             <Grid item xs={12} sm={1}>
               <Box>with staff ID</Box>
             </Grid>
+
             <Grid item xs={12} sm={3}>
               <Box mx={1}>
                 <TextField 
@@ -378,44 +384,65 @@ function ResultForm(props) {
                   name="staffID" 
                   id="staffID" 
                   label="Staff ID" 
-                  required 
-                />
+                  required />
               </Box>
             </Grid>
+
             <Grid item xs={12} sm={1}>
               <Box>today,</Box>
             </Grid>
-            <Grid item xs={12} sm={3}>
-                <Box mx={1}>
-                    <TextField 
-                        variant="outlined"
-                        type="datetime-local" 
-                        name="electionDate" 
-                        id="electionDate" 
-                        label="Election Date" 
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        required 
-                    />
-                </Box>
-            </Grid>
-            <Grid item xs={12}>
-                <Box>hereby certify that the information contained in this form is a true and accurate account of votes cast in this polling unit. The election was CONTESTED/NOT CONTESTED.</Box>
-            </Grid>
-        </Grid>
 
-          <Box>
-            <Box m={3} >
-                <Button variant="contained" color="primary" onClick={handlePreviewClick}>
-                  Preview
-                </Button>
-            </Box>
+            <Grid item xs={12} sm={3}>
+              <Box mx={1}>
+                <TextField 
+                  variant="outlined"
+                  type="datetime-local" 
+                  name="electionDate" 
+                  id="electionDate" 
+                  label="Election Date" 
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  required />
+              </Box>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box>hereby certify that the information contained in this form is a true and accurate account of votes cast in this polling unit. The election was CONTESTED/NOT CONTESTED.</Box>
+            </Grid>
+          </Grid>
+
+          <Button className='view-result-button' style={previewButton} onClick={handlePreviewClick}>
+            Preview
+          </Button>
         </Box>
       </Box>
     </Box>
-    </>
+  </>
   );
 }}
 
 export default ResultForm;
+
+const voteField =  {
+  marginBottom: "2.0em",
+}
+
+const previewButton = {
+    backgroundColor: "transparent",
+    border: "none",
+    color: "green",
+    textAlign: "center",
+    textDecoration: "none",
+    display: "inline-block",
+    fontSize: "16px",
+    borderRadius: "5px",
+    border: "1px solid green",
+    margin: "1.0em",
+  }
+  
+  const previewHover = {
+    backgroundColor: "#9A9A9A",
+    color: "white",
+    border: "none",
+  }
