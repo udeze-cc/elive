@@ -170,7 +170,7 @@ function ResultForm(props) {
   
   function UnitComponent({ unitLabel, nameLabel, idLabel, nameData, idData, onChangeName, onChangeId }) {
     return (
-      <Box className='result-component'>
+      // <Box className='result-component'>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={4} md={3}>
             <Typography variant="h6" className='component-typography'>{unitLabel}</Typography>
@@ -182,13 +182,13 @@ function ResultForm(props) {
               <TextField fullWidth variant="outlined" label={idLabel} value={idData} onChange={e => onChangeId(e.target.value)} sx={{ marginBottom: 2 }} />
           </Grid>
         </Grid>
-      </Box>
+      // </Box>
     );
   }
 
   function ElectionComponent({ electionLabel, nameLabel, idLabel, nameData, idData, onChangeName, onChangeId }) {
     return (
-      <Box className='result-component'>
+      // <Box className='result-component'>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={4} md={3}>
             <Typography variant="h6" className='component-typography'>{electionLabel}</Typography>
@@ -200,14 +200,14 @@ function ResultForm(props) {
             <TextField fullWidth variant="outlined" label={idLabel} value={idData} onChange={e => onChangeId(e.target.value)} sx={{ marginBottom: 2 }} />
           </Grid>
         </Grid>
-      </Box>
+      // </Box>
     );
   }
 
 
   function BallotComponent({ description, wordLabel, figureLabel, wordData, figureData, onWordChange, onFigureChange }) {
     return (
-      <Box className='result-component'>
+      // <Box className='result-component'>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={4} md={3}>
             <Typography variant="h6" className='component-typography'>{description}</Typography> 
@@ -233,7 +233,7 @@ function ResultForm(props) {
             />
           </Grid>
         </Grid>
-      </Box>
+      // </Box>
     );
   }
 
@@ -244,7 +244,7 @@ function ResultForm(props) {
             <Typography variant="h6" className='component-typography'>{partyName}</Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={1}>
-            <Typography variant="h6" className='component-typography'>{partyID}</Typography>         
+            <Typography variant="h6" style={voteField}>{partyID}</Typography>         
           </Grid>
           <Grid item xs={12} sm={6} md={2}>
             <TextField fullWidth variant="outlined" label="Votes in Fig" value={votesFig} onChange={e => onInputChange('votesFig', e.target.value)} />
@@ -259,7 +259,7 @@ function ResultForm(props) {
   function StaffComponent ({nameLabel, idLabel, nameData, idData, onChangeName, onChangeId }) {
 
   }
-
+  
   if (isPreview) {
     return (
       <>
@@ -269,11 +269,11 @@ function ResultForm(props) {
         <Box>{JSON.stringify(voteData)}</Box>
         <Box>{JSON.stringify(staffData)}</Box>
 
-        <Button variant="contained" className='view-result-button' onClick={handleBackClick}>
+        <Button variant="contained" style={previewButton} onClick={handleBackClick}>
           Back
         </Button>
 
-        <Button variant="contained" className='view-result-button' onClick={handleSubmit}>
+        <Button variant="contained" style={previewButton} onClick={handleSubmit}>
           Submit
         </Button>
       </>
@@ -412,7 +412,7 @@ function ResultForm(props) {
             </Grid>
           </Grid>
 
-          <Button variant="contained" className='view-result-button' onClick={handlePreviewClick}>
+          <Button className='view-result-button' style={previewButton} onClick={handlePreviewClick}>
             Preview
           </Button>
         </Box>
@@ -423,3 +423,26 @@ function ResultForm(props) {
 }}
 
 export default ResultForm;
+
+const voteField =  {
+  marginBottom: "2.0em",
+}
+
+const previewButton = {
+    backgroundColor: "transparent",
+    border: "none",
+    color: "green",
+    textAlign: "center",
+    textDecoration: "none",
+    display: "inline-block",
+    fontSize: "16px",
+    borderRadius: "5px",
+    border: "1px solid green",
+    margin: "1.0em",
+  }
+  
+  const previewHover = {
+    backgroundColor: "#9A9A9A",
+    color: "white",
+    border: "none",
+  }
