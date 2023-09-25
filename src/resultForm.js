@@ -2,12 +2,26 @@ import React, { useState } from 'react';
 import {Grid, Button, Typography, TextField, Box}  from '@mui/material';
 import './App.css';
 
+const saveResult = async (body = {}, admin) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const myRequest = new Request(`https://9656mgkl5a.execute-api.eu-west-2.amazonaws.com/dev/create/document/Results`, {
+    body: JSON.stringify(body),
+    method: "POST",
+    headers: myHeaders,
+    mode: "cors",
+    cache: "default",
+  });
+  return await fetch(myRequest);
+} 
+
 function ResultForm() {
   const [partyName, setPartyName] = useState('');
   const [voteCount, setVoteCount] = useState('');
   const [pollingCentre, setPollingCentre] = useState('');
-  const [officerID, setOfficerID] = useState('');
-  const [electionID, setElectionID] = useState('');
+  const [officerId, setOfficerID] = useState('');
+  const [electionId, setElectionID] = useState('');
   const [electionDate, setElectionDate] = useState('');
   
   const [isPreview, setIsPreview] = useState(false);
@@ -25,12 +39,17 @@ function ResultForm() {
     if (!partyName) return;
     if (!voteCount) return;
     if (!pollingCentre) return;
-    if (!officerID) return;
-    if (!electionID) return;
+    if (!officerId) return;
+    if (!electionId) return;
     if (!electionDate) return;
-    alert('Submitting Form')
-    const body = {partyName, voteCount, pollingCentre, officerID, electionDate, electionID}
-    
+    alert('You are about to submit these resuts');
+    // const {partyName, numberOfVotes, pollingLocation, officialId}
+    const body = {partyName, voteCount, pollingCentre, officerId, electionDate, electionId};
+    saveResult(body, 'udeze.cc@gmail.com')
+    .then(res => {
+      alert(`Form submition is successfully with the following response: ${JSON.stringify(res.json())}`)
+    })
+    .catch(error => console.error(error));
   }
 
   if (isPreview) {
@@ -49,7 +68,7 @@ function ResultForm() {
             <Typography variant="h6" className="result-input">Election ID</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
-           {electionID}
+           {electionId}
           </Grid>
         </Grid>
 
@@ -85,7 +104,7 @@ function ResultForm() {
             <Typography variant="h6" className="result-input">Officer ID</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
-           {officerID}
+           {officerId}
           </Grid>
         </Grid>
 
@@ -128,7 +147,7 @@ function ResultForm() {
               <Typography variant="h5" className="result-input">Election ID :</Typography>
             </Grid>
             <Grid>
-              <TextField id="ElectionID" fullWidth label="ElectionID" className="result-input" variant="outlined" value={electionID} onChange={e => setElectionID(e.target.value)} />
+              <TextField id="ElectionID" fullWidth label="ElectionID" className="result-input" variant="outlined" value={electionId} onChange={e => setElectionID(e.target.value)} />
           </Grid>
         </Grid>
 
@@ -164,7 +183,7 @@ function ResultForm() {
             <Typography variant="h5" className="result-input">OfficerID :</Typography>
           </Grid>
           <Grid>
-            <TextField id="OfficerID" fullWidth className="result-input" label="OfficerID" variant="outlined" value={officerID} onChange={e => setOfficerID(e.target.value)}/>
+            <TextField id="OfficerID" fullWidth className="result-input" label="OfficerID" variant="outlined" value={officerId} onChange={e => setOfficerID(e.target.value)}/>
           </Grid>
         </Grid>
 
