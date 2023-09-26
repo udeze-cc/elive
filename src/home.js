@@ -17,6 +17,18 @@ const partyColors = {
     Democratic: GREEN_PALETTE[2]
 };
 
+const getResults= async () => {
+    const myHeaders = new Headers();
+    const myRequest = new Request(`https://9656mgkl5a.execute-api.eu-west-2.amazonaws.com/dev/fetch/document/Results`, {
+      method: "GET",
+      headers: myHeaders,
+      mode: "cors",
+      cache: "default",
+    });
+    const response = await fetch(myRequest);
+    return response.json();
+  } 
+
 
 const Box = ({ children, ...props }) => <div {...props}>{children}</div>;
 
@@ -27,7 +39,7 @@ const Card = ({ children }) => (
 );
 
 function Home() {
-
+    const [results, setResults] = useState([]);
     const [currentState, setCurrentState] = useState(0); // selected index for state
     const [currentLga, setCurrentLga] = useState(0);     // selected index for lga
     const [currentWard, setCurrentWard] = useState(0);   // selected index for ward
@@ -42,6 +54,12 @@ function Home() {
     const [lgas, setLgas] = useState([]);
     const [wards, setWards] = useState([]);
     const [pollingUnits, setPollingUnits] = useState([]);
+
+    getResults()
+    .then(async res => {
+        const results = await res;
+        setResults(results._resultList);
+    })
 
     const toggleSearchOptions = () => {
         setShowSearchOptions(!showSearchOptions);
@@ -227,189 +245,197 @@ function Home() {
     };
 
     return (
-      <>
-        <AppBar position="static" sx={{ backgroundColor: 'green' }}>
-          <Toolbar>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              e-lections
-              </Typography>
-                <SearchIcon 
-                onClick={toggleSearchOptions}
-                aria-label="Toggle search options"
-                className="search-icon"/>
-                <a className="account-button" href={`/dashboard`}>Account</a>
-          </Toolbar>
-        </AppBar>
-        <Box className="box">
-            <FormControl className="form-control">
-                <InputAdornment position="start">
-                    {isSearchFormVisible && (
-                        <FormControl className="form-control">
-                            <InputAdornment position="start" />
-                        </FormControl>
-                    )}
-                </InputAdornment>
-            </FormControl>
-            {showSearchOptions && (
-            <>
-                <FormControl component="fieldset" className="form-control">
-                    <FormLabel component="legend">Select Unit</FormLabel>
-                    <RadioGroup row name="unit" value={currentUnit} onChange={handleRadioChange}>
-                        <FormControlLabel value="state" control={<Radio />} label="State" />
-                        <FormControlLabel value="lga" control={<Radio />} label="LGA" />
-                        <FormControlLabel value="ward" control={<Radio />} label="Ward" />
-                        <FormControlLabel value="pollingUnit" control={<Radio />} label="Polling Unit" />
-                    </RadioGroup>
-                </FormControl>
+        <>
+            <Box>
+                Results
+            </Box>
+            <Box>
+                {JSON.stringify(results)}
+            </Box>
+        </>
+    //   <>
+    //     <AppBar position="static" sx={{ backgroundColor: 'green' }}>
+    //       <Toolbar>
+    //           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //           e-lections
+    //           </Typography>
+    //             <SearchIcon 
+    //             onClick={toggleSearchOptions}
+    //             aria-label="Toggle search options"
+    //             className="search-icon"/>
+    //             <a className="account-button" href={`/dashboard`}>Account</a>
+    //       </Toolbar>
+    //     </AppBar>
+    //     <Box className="box">
+    //         <FormControl className="form-control">
+    //             <InputAdornment position="start">
+    //                 {isSearchFormVisible && (
+    //                     <FormControl className="form-control">
+    //                         <InputAdornment position="start" />
+    //                     </FormControl>
+    //                 )}
+    //             </InputAdornment>
+    //         </FormControl>
+    //         {showSearchOptions && (
+    //         <>
+    //             <FormControl component="fieldset" className="form-control">
+    //                 <FormLabel component="legend">Select Unit</FormLabel>
+    //                 <RadioGroup row name="unit" value={currentUnit} onChange={handleRadioChange}>
+    //                     <FormControlLabel value="state" control={<Radio />} label="State" />
+    //                     <FormControlLabel value="lga" control={<Radio />} label="LGA" />
+    //                     <FormControlLabel value="ward" control={<Radio />} label="Ward" />
+    //                     <FormControlLabel value="pollingUnit" control={<Radio />} label="Polling Unit" />
+    //                 </RadioGroup>
+    //             </FormControl>
 
-                <FormControl variant="outlined" className="dropdown">
-                    <Select value={selectedUnit} onChange={handleDropdownChange}>
-                        {renderDropdownOptions()}
-                    </Select>
-                </FormControl>
-                </>
-            )}
+    //             <FormControl variant="outlined" className="dropdown">
+    //                 <Select value={selectedUnit} onChange={handleDropdownChange}>
+    //                     {renderDropdownOptions()}
+    //                 </Select>
+    //             </FormControl>
+    //             </>
+    //         )}
 
-            <Grid className="national-grid-container">
-                <Card className="card">
-                        <SectionContainer title="Federal">
-                            <Typography></Typography>
-                            <button className="view-result-button">View Result</button>
-                        </SectionContainer>                    
-                        <Typography variant="h6" className="unit-header">National Result</Typography>
-                        <Box className="national-party-box">
-                        <Box className="national-party-cards">
-                            {federalData.labels.map((party, index) => (
-                                <Box key={party} className="national-party-card" style={{backgroundColor: partyColors[party]}}>
-                                    {party}
-                                    <Typography className="national-party-typography">
-                                        {(federalData.datasets[0].data[index] * 100).toFixed(2)}%
-                                    </Typography>
-                                </Box>
-                            ))}
-                        </Box>
-                    </Box>
-                </Card>
-            </Grid>
+    //         <Grid className="national-grid-container">
+    //             <Card className="card">
+    //                     <SectionContainer title="Federal">
+    //                         <Typography></Typography>
+    //                         <button className="view-result-button">View Result</button>
+    //                     </SectionContainer>                    
+    //                     <Typography variant="h6" className="unit-header">National Result</Typography>
+    //                     <Box className="national-party-box">
+    //                     <Box className="national-party-cards">
+    //                         {federalData.labels.map((party, index) => (
+    //                             <Box key={party} className="national-party-card" style={{backgroundColor: partyColors[party]}}>
+    //                                 {party}
+    //                                 <Typography className="national-party-typography">
+    //                                     {(federalData.datasets[0].data[index] * 100).toFixed(2)}%
+    //                                 </Typography>
+    //                             </Box>
+    //                         ))}
+    //                     </Box>
+    //                 </Box>
+    //             </Card>
+    //         </Grid>
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                    <Card className="card">
-                        <Typography variant="h6" className="unit-header">State Result</Typography>
-                        <ComposedChart
-                            layout="vertical"
-                            width={400}
-                            height={200}
-                            data={stateData.datasets[0].data.map((value, index) => ({
-                                name: stateData.labels[index],
-                                votes: value,
-                                avg: 25
-                            }))}
-                            margin={{top: 20, right: 20, bottom: 20, left: 50}} >
-                            <CartesianGrid stroke="#f5f5f5" />
-                            <XAxis type="number" ticks={[0, 25, 50, 75 ]} />
-                            <YAxis dataKey="name" type="category" />
-                            <Tooltip />
-                            <Bar dataKey="votes" barSize={30}>
-                                {
-                                    stateData.labels.map((entry, index) => (
-                                        <Cell key={index} fill={partyColors[entry]} />
-                                    ))
-                                }
-                                <LabelList dataKey="votes" position="right" formatter={(value) => `${value}%`} />
-                            </Bar>
-                            <Line dataKey="avg" stroke="#ff7300" />
-                        </ComposedChart>
+    //         <Grid container spacing={3}>
+    //             <Grid item xs={12} md={6}>
+    //                 <Card className="card">
+    //                     <Typography variant="h6" className="unit-header">State Result</Typography>
+    //                     <ComposedChart
+    //                         layout="vertical"
+    //                         width={400}
+    //                         height={200}
+    //                         data={stateData.datasets[0].data.map((value, index) => ({
+    //                             name: stateData.labels[index],
+    //                             votes: value,
+    //                             avg: 25
+    //                         }))}
+    //                         margin={{top: 20, right: 20, bottom: 20, left: 50}} >
+    //                         <CartesianGrid stroke="#f5f5f5" />
+    //                         <XAxis type="number" ticks={[0, 25, 50, 75 ]} />
+    //                         <YAxis dataKey="name" type="category" />
+    //                         <Tooltip />
+    //                         <Bar dataKey="votes" barSize={30}>
+    //                             {
+    //                                 stateData.labels.map((entry, index) => (
+    //                                     <Cell key={index} fill={partyColors[entry]} />
+    //                                 ))
+    //                             }
+    //                             <LabelList dataKey="votes" position="right" formatter={(value) => `${value}%`} />
+    //                         </Bar>
+    //                         <Line dataKey="avg" stroke="#ff7300" />
+    //                     </ComposedChart>
 
-                        <SectionContainer title="State">
-                            <Typography variant="h6" className="typography-margin">{selectedState}</Typography>
-                            <button className="view-result-button">View Result</button>
-                        </SectionContainer>
-                    </Card>
-                </Grid>
+    //                     <SectionContainer title="State">
+    //                         <Typography variant="h6" className="typography-margin">{selectedState}</Typography>
+    //                         <button className="view-result-button">View Result</button>
+    //                     </SectionContainer>
+    //                 </Card>
+    //             </Grid>
 
 
-                <Grid item xs={12} md={6}>
-                    <Card className="card">
-                        <Typography variant="h6" className="unit-header">Local Government Area Result</Typography>
-                        <PieChart width={400} height={200} margin={{left: 50, top: 20 }} >
-                            <Pie
-                                data={lgaData.datasets[0].data.map((value, index) => ({ name: lgaData.labels[index], value }))}
-                                cx={80}
-                                cy={80}
-                                labelLine={false}
-                                label={renderCustomizedLabel}
-                                outerRadius={90}
-                                dataKey="value"
-                            >
-                                {lgaData.labels.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={partyColors[entry]} />
-                                    ))}
-                            </Pie>
-                            <Legend verticalAlign="top" align="right" layout="vertical" />
-                        </PieChart>
-                        <SectionContainer title="Local Government Area">
-                            <Typography variant="h6" className="typography-margin">{selectedLGA}</Typography>
-                            <button className="view-result-button">View Result</button>
-                        </SectionContainer>
-                    </Card>
-                </Grid>
+    //             <Grid item xs={12} md={6}>
+    //                 <Card className="card">
+    //                     <Typography variant="h6" className="unit-header">Local Government Area Result</Typography>
+    //                     <PieChart width={400} height={200} margin={{left: 50, top: 20 }} >
+    //                         <Pie
+    //                             data={lgaData.datasets[0].data.map((value, index) => ({ name: lgaData.labels[index], value }))}
+    //                             cx={80}
+    //                             cy={80}
+    //                             labelLine={false}
+    //                             label={renderCustomizedLabel}
+    //                             outerRadius={90}
+    //                             dataKey="value"
+    //                         >
+    //                             {lgaData.labels.map((entry, index) => (
+    //                                 <Cell key={`cell-${index}`} fill={partyColors[entry]} />
+    //                                 ))}
+    //                         </Pie>
+    //                         <Legend verticalAlign="top" align="right" layout="vertical" />
+    //                     </PieChart>
+    //                     <SectionContainer title="Local Government Area">
+    //                         <Typography variant="h6" className="typography-margin">{selectedLGA}</Typography>
+    //                         <button className="view-result-button">View Result</button>
+    //                     </SectionContainer>
+    //                 </Card>
+    //             </Grid>
 
-                <Grid item xs={12} md={6}>
-                    <Card className="card">
-                    <Typography variant="h6" className="unit-header">Ward Result</Typography>
-                        <PieChart width={400} height={200}  margin={{left: 50 }}>
-                            <Pie
-                                data={wardData.datasets[0].data.map((value, index) => ({ name: wardData.labels[index], value }))}
-                                cx={80}
-                                cy={100}
-                                innerRadius={40}
-                                labelLine={false}
-                                label={renderCustomizedLabel}
-                                outerRadius={100}
-                                paddingAngle={5}
-                                dataKey="value"
-                            >
-                                {wardData.labels.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={partyColors[entry]} />
-                                    ))}
-                            </Pie>
-                            <Legend verticalAlign="top" align="right" layout="vertical" />
-                        </PieChart>
-                        <SectionContainer title="Ward">
-                            <Typography variant="h6" className="typography-margin">{selectedWard}</Typography>
-                            <button className="view-result-button">View Result</button>
-                        </SectionContainer>
-                    </Card>
-                </Grid>
+    //             <Grid item xs={12} md={6}>
+    //                 <Card className="card">
+    //                 <Typography variant="h6" className="unit-header">Ward Result</Typography>
+    //                     <PieChart width={400} height={200}  margin={{left: 50 }}>
+    //                         <Pie
+    //                             data={wardData.datasets[0].data.map((value, index) => ({ name: wardData.labels[index], value }))}
+    //                             cx={80}
+    //                             cy={100}
+    //                             innerRadius={40}
+    //                             labelLine={false}
+    //                             label={renderCustomizedLabel}
+    //                             outerRadius={100}
+    //                             paddingAngle={5}
+    //                             dataKey="value"
+    //                         >
+    //                             {wardData.labels.map((entry, index) => (
+    //                                 <Cell key={`cell-${index}`} fill={partyColors[entry]} />
+    //                                 ))}
+    //                         </Pie>
+    //                         <Legend verticalAlign="top" align="right" layout="vertical" />
+    //                     </PieChart>
+    //                     <SectionContainer title="Ward">
+    //                         <Typography variant="h6" className="typography-margin">{selectedWard}</Typography>
+    //                         <button className="view-result-button">View Result</button>
+    //                     </SectionContainer>
+    //                 </Card>
+    //             </Grid>
 
-                <Grid item xs={12} md={6}>
-                    <Card className="card">
-                    <Typography variant="h6" className="unit-header">Polling Unit Result</Typography>
-                        <BarChart width={300} height={200}
-                            data={pollingUnitData.datasets[0].data.map((value, index) => ({
-                            name: pollingUnitData.labels[index],
-                            votes: value }))} >
-                            <XAxis dataKey="name" />
-                            <YAxis ticks={[0, 25, 50, 75 ]}/>
-                            <Bar dataKey="votes">
-                                {
-                                    pollingUnitData.labels.map((entry, index) => (
-                                        <Cell key={index} fill={partyColors[entry]} />
-                                    ))
-                                }
-                            <LabelList dataKey="votes" position="top" formatter={(value) => `${value}%`} />
-                            </Bar>
-                        </BarChart>
-                        <SectionContainer title="Polling Unit">
-                            <Typography variant="h6" className="typography-margin">{selectedPollingUnit}</Typography>
-                            <button className="view-result-button">View Result</button>
-                        </SectionContainer>
-                    </Card>
-                </Grid>
-            </Grid>
-        </Box>
-      </>
+    //             <Grid item xs={12} md={6}>
+    //                 <Card className="card">
+    //                 <Typography variant="h6" className="unit-header">Polling Unit Result</Typography>
+    //                     <BarChart width={300} height={200}
+    //                         data={pollingUnitData.datasets[0].data.map((value, index) => ({
+    //                         name: pollingUnitData.labels[index],
+    //                         votes: value }))} >
+    //                         <XAxis dataKey="name" />
+    //                         <YAxis ticks={[0, 25, 50, 75 ]}/>
+    //                         <Bar dataKey="votes">
+    //                             {
+    //                                 pollingUnitData.labels.map((entry, index) => (
+    //                                     <Cell key={index} fill={partyColors[entry]} />
+    //                                 ))
+    //                             }
+    //                         <LabelList dataKey="votes" position="top" formatter={(value) => `${value}%`} />
+    //                         </Bar>
+    //                     </BarChart>
+    //                     <SectionContainer title="Polling Unit">
+    //                         <Typography variant="h6" className="typography-margin">{selectedPollingUnit}</Typography>
+    //                         <button className="view-result-button">View Result</button>
+    //                     </SectionContainer>
+    //                 </Card>
+    //             </Grid>
+    //         </Grid>
+    //     </Box>
+    //   </>
     );
 }
 
