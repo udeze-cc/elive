@@ -1,7 +1,7 @@
 import { Table, Box, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 
 function ResultTable(props) {
-    const { partyName, voteCount, pollingCentre, officerId, electionId, electionDate } = props.results;
+    const { partyName, voteCount, pollingCentre, officerId, electionId, electionDate } = props.results ? props.results : {};
     return (
         <>
         <Box className="box">
