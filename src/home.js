@@ -1,4 +1,5 @@
 import { Typography, Grid, FormControl, InputAdornment, FormControlLabel, FormLabel, Radio, RadioGroup, Select, MenuItem } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { AppBar, Toolbar } from '@mui/material';
 import "./App.css";
 import React, { useState, useEffect } from 'react';
@@ -8,6 +9,7 @@ import {
     CartesianGrid, Tooltip, Legend, Line, LabelList
 } from "recharts";
 import SearchIcon from '@mui/icons-material/Search';
+import ResultTable from "./table";
 
 const GREEN_PALETTE = ["#08e17b", "#4CAF50", "#107c41"];
 
@@ -16,6 +18,39 @@ const partyColors = {
     Congress: GREEN_PALETTE[1],
     Democratic: GREEN_PALETTE[2]
 };
+
+function AllResultsTable (props) {
+    const rowItems = props.results.map((result) => {
+        return (
+            <TableBody>
+                <TableRow>
+                    <TableCell>{result.electionId}</TableCell>
+                    <TableCell>{result.pollingCentre}</TableCell>
+                    <TableCell>{result.partyName}</TableCell>
+                    <TableCell>{result.voteCount}</TableCell>
+                    <TableCell>{result.officerId}</TableCell>
+                    <TableCell>{result.electionDate}</TableCell>
+                </TableRow>
+            </TableBody>
+        )
+    });
+    
+    return (
+        <Table>
+        <TableHead>
+            <TableRow>
+            <TableCell>Election ID</TableCell>
+            <TableCell>Polling Centre</TableCell>
+            <TableCell>Party Name</TableCell>
+            <TableCell>Vote Count</TableCell>
+            <TableCell>Officer ID</TableCell>
+            <TableCell>Election Date</TableCell>
+            </TableRow>
+        </TableHead>
+        {rowItems}
+        </Table>
+    )
+}
 
 const getResults= async () => {
     const myHeaders = new Headers();
@@ -38,221 +73,254 @@ const Card = ({ children }) => (
     </Box>
 );
 
-function Home() {
-    const [results, setResults] = useState([]);
-    const [currentState, setCurrentState] = useState(0); // selected index for state
-    const [currentLga, setCurrentLga] = useState(0);     // selected index for lga
-    const [currentWard, setCurrentWard] = useState(0);   // selected index for ward
-    const [currentPollingUnit, setCurrentPollingUnit] = useState(0); // selected index for polling unit
-    const [showSearchOptions, setShowSearchOptions] = useState(false);
-    const [isSearchFormVisible, setIsSearchFormVisible] = useState(false);
+class Home extends React.Component {
 
-    const [selectedState, setSelectedState] = useState("Abuja");
-    const [selectedLGA, setSelectedLGA] = useState("Maitama");
-    const [selectedWard, setSelectedWard] = useState("Area3");
-    const [selectedPollingUnit, setSelectedPollingUnit] = useState("Secretariat");
-    const [lgas, setLgas] = useState([]);
-    const [wards, setWards] = useState([]);
-    const [pollingUnits, setPollingUnits] = useState([]);
+    constructor(props) {
+        super(props);
+        this.state = { results: [] };
+        // this.handleStatusChange = this.handleStatusChange.bind(this);
+    }
 
-    getResults()
-    .then(async res => {
-        const results = await res;
-        setResults(results._resultList);
-    })
+    componentDidMount() {
+        getResults()
+        .then(async res => {
+            const results = await res;
+            if (results) this.setState({results: results._resultList });
+        })
+    }
 
-    const toggleSearchOptions = () => {
-        setShowSearchOptions(!showSearchOptions);
-        setIsSearchFormVisible(prevVisible => !prevVisible);
-    };
-
-    const SectionContainer = ({ children }) => (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            {children}
-        </div>
-        );
-
-    const federalData = {
-                labels: ['Alliance', 'Congress', 'Democratic'],
-                datasets: [{
-                    data: [0.4277, 0.3666, 0.2057],
-                    backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
-                }]
-            };
-
-            const stateData = {
-                labels: ['Alliance', 'Congress', 'Democratic'],
-                datasets: [{
-                    data: [51.28, 25.64, 23.08],
-                    backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
-                }]
-            };
-
-            const lgaData = {
-                labels: ['Alliance', 'Congress', 'Democratic'],
-                datasets: [{
-                    data: [0.5128, 0.2564, 0.2308],
-                    backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
-                }]
-            };
-
-            const wardData = {
-                labels: ['Alliance', 'Congress', 'Democratic'],
-                datasets: [{
-                    data: [0.5128, 0.2564, 0.2308],
-                    backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
-                }]
-            };
-
-            const pollingUnitData = {
-                labels: ['Alliance', 'Congress', 'Democratic'],
-                datasets: [{
-                    data: [51.28, 25.64, 23.08],
-                    backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
-                }]
-            };
-
-            const RADIAN = Math.PI / 180;
-            const renderCustomizedLabel = ({
-                cx, cy, midAngle, innerRadius, outerRadius, percent
-            }) => {
-                const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                return (
-                    <text x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
-                        {`${(percent * 100).toFixed(0)}%`}
-                    </text>
-                );
-            };
-            const federal = ['Alliance', 'Congress', 'Democratic' ]
-            const state = [ 'Anambra', 'Lagos', 'Abuja' ];
-            const lga = ['Nnewi', 'Lekki', 'Maitama' ];
-            const ward = ['Zone1', 'Phase2', 'Area3' ];
-            const pollingUnit = ['University', 'Hall', 'Secretariat' ];
-
-            const locations = [
-                {
-                    state: "Anambra",
-                    lga: [
-                        {
-                            name: "Nnewi",
-                            ward: [
-                                {
-                                    name: "Zone1",
-                                    pollingUnit: ["University"]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    state: "Lagos",
-                    lga: [
-                        {
-                            name: "Lekki",
-                            ward: [
-                                {
-                                    name: "Phase2",
-                                    pollingUnit: ["Hall"]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    state: "Abuja",
-                    lga: [
-                        {
-                            name: "Maitama",
-                            ward: [
-                                {
-                                    name: "Area3",
-                                    pollingUnit: ["Secretariat"]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ];
-
-            useEffect(() => {
-                const selectedStateData = locations.find(loc => loc.state === selectedState);
-                if (selectedStateData) {
-                    setLgas(selectedStateData.lga);
-                    setSelectedLGA(selectedStateData.lga[0]?.name);
-                }
-            }, [selectedState]);
-
-            useEffect(() => {
-                const selectedLGAData = lgas.find(lga => lga.name === selectedLGA);
-                if (selectedLGAData) {
-                    setWards(selectedLGAData.ward);
-                    setSelectedWard(selectedLGAData.ward[0]?.name);
-                }
-            }, [selectedLGA, lgas]);
-
-            useEffect(() => {
-                const selectedWardData = wards.find(ward => ward.name === selectedWard);
-                if (selectedWardData) {
-                    setPollingUnits(selectedWardData.pollingUnit);
-                    setSelectedPollingUnit(selectedWardData.pollingUnit[0]);
-                }
-            }, [selectedWard, wards]);
-
-    const [currentUnit, setCurrentUnit] = useState("state"); // to determine which dropdown to display
-    const [selectedUnit, setSelectedUnit] = useState('');   // value of the selected dropdown item
-
-    const handleRadioChange = (event) => {
-        setCurrentUnit(event.target.value);
-        setSelectedUnit('');
-    };
-
-    const handleDropdownChange = (event) => {
-        setSelectedUnit(event.target.value);
-
-        switch (currentUnit) {
-            case 'state':
-                setSelectedState(event.target.value);
-                break;
-            case 'lga':
-                setSelectedLGA(event.target.value);
-                break;
-            case 'ward':
-                setSelectedWard(event.target.value);
-                break;
-            case 'pollingUnit':
-                setSelectedPollingUnit(event.target.value);
-                break;
-            default:
-                break;
+    render() {
+        if (this.state.results.length < 1) {
+          return 'Loading...';
         }
-    };
 
-    const renderDropdownOptions = () => {
-        switch (currentUnit) {
-            case 'state':
-                return locations.map(s => <MenuItem value={s.state} key={s.state}>{s.state}</MenuItem>);
-            case 'lga':
-                return lgas.map(l => <MenuItem value={l.name} key={l.name}>{l.name}</MenuItem>);
-            case 'ward':
-                return wards.map(w => <MenuItem value={w.name} key={w.name}>{w.name}</MenuItem>);
-            case 'pollingUnit':
-                return pollingUnits.map(p => <MenuItem value={p} key={p}>{p}</MenuItem>);
-            default:
-                return null;
-        }
-    };
+        return (
+            <AllResultsTable results = {this.state.results}/>
+        )
 
-    return (
-        <>
-            <Box>
-                Results
-            </Box>
-            <Box>
-                {JSON.stringify(results)}
-            </Box>
-        </>
+        // const listItems = this.state.results.map((result) =><ResultTable results = {result}/>);
+        // return (
+        //     <>
+        //         {listItems}
+        //     </>
+        // )
+    }
+
+    // handleStatusChange(status) {
+    //     this.setState({
+    //       isOnline: status.isOnline
+    //     });
+    // }
+
+    // const [results, setResults] = useState([]);
+    // const [currentState, setCurrentState] = useState(0); // selected index for state
+    // const [currentLga, setCurrentLga] = useState(0);     // selected index for lga
+    // const [currentWard, setCurrentWard] = useState(0);   // selected index for ward
+    // const [currentPollingUnit, setCurrentPollingUnit] = useState(0); // selected index for polling unit
+    // const [showSearchOptions, setShowSearchOptions] = useState(false);
+    // const [isSearchFormVisible, setIsSearchFormVisible] = useState(false);
+
+    // const [selectedState, setSelectedState] = useState("Abuja");
+    // const [selectedLGA, setSelectedLGA] = useState("Maitama");
+    // const [selectedWard, setSelectedWard] = useState("Area3");
+    // const [selectedPollingUnit, setSelectedPollingUnit] = useState("Secretariat");
+    // const [lgas, setLgas] = useState([]);
+    // const [wards, setWards] = useState([]);
+    // const [pollingUnits, setPollingUnits] = useState([]);
+
+
+    // const toggleSearchOptions = () => {
+    //     setShowSearchOptions(!showSearchOptions);
+    //     setIsSearchFormVisible(prevVisible => !prevVisible);
+    // };
+
+    // const SectionContainer = ({ children }) => (
+    //     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+    //         {children}
+    //     </div>
+    //     );
+
+    // const federalData = {
+    //             labels: ['Alliance', 'Congress', 'Democratic'],
+    //             datasets: [{
+    //                 data: [0.4277, 0.3666, 0.2057],
+    //                 backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
+    //             }]
+    //         };
+
+    //         const stateData = {
+    //             labels: ['Alliance', 'Congress', 'Democratic'],
+    //             datasets: [{
+    //                 data: [51.28, 25.64, 23.08],
+    //                 backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
+    //             }]
+    //         };
+
+    //         const lgaData = {
+    //             labels: ['Alliance', 'Congress', 'Democratic'],
+    //             datasets: [{
+    //                 data: [0.5128, 0.2564, 0.2308],
+    //                 backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
+    //             }]
+    //         };
+
+    //         const wardData = {
+    //             labels: ['Alliance', 'Congress', 'Democratic'],
+    //             datasets: [{
+    //                 data: [0.5128, 0.2564, 0.2308],
+    //                 backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
+    //             }]
+    //         };
+
+    //         const pollingUnitData = {
+    //             labels: ['Alliance', 'Congress', 'Democratic'],
+    //             datasets: [{
+    //                 data: [51.28, 25.64, 23.08],
+    //                 backgroundColor: [partyColors.Alliance, partyColors.Congress, partyColors.Democratic]
+    //             }]
+    //         };
+
+    //         const RADIAN = Math.PI / 180;
+    //         const renderCustomizedLabel = ({
+    //             cx, cy, midAngle, innerRadius, outerRadius, percent
+    //         }) => {
+    //             const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    //             const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    //             const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    //             return (
+    //                 <text x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
+    //                     {`${(percent * 100).toFixed(0)}%`}
+    //                 </text>
+    //             );
+    //         };
+    //         const federal = ['Alliance', 'Congress', 'Democratic' ]
+    //         const state = [ 'Anambra', 'Lagos', 'Abuja' ];
+    //         const lga = ['Nnewi', 'Lekki', 'Maitama' ];
+    //         const ward = ['Zone1', 'Phase2', 'Area3' ];
+    //         const pollingUnit = ['University', 'Hall', 'Secretariat' ];
+
+    //         const locations = [
+    //             {
+    //                 state: "Anambra",
+    //                 lga: [
+    //                     {
+    //                         name: "Nnewi",
+    //                         ward: [
+    //                             {
+    //                                 name: "Zone1",
+    //                                 pollingUnit: ["University"]
+    //                             }
+    //                         ]
+    //                     }
+    //                 ]
+    //             },
+    //             {
+    //                 state: "Lagos",
+    //                 lga: [
+    //                     {
+    //                         name: "Lekki",
+    //                         ward: [
+    //                             {
+    //                                 name: "Phase2",
+    //                                 pollingUnit: ["Hall"]
+    //                             }
+    //                         ]
+    //                     }
+    //                 ]
+    //             },
+    //             {
+    //                 state: "Abuja",
+    //                 lga: [
+    //                     {
+    //                         name: "Maitama",
+    //                         ward: [
+    //                             {
+    //                                 name: "Area3",
+    //                                 pollingUnit: ["Secretariat"]
+    //                             }
+    //                         ]
+    //                     }
+    //                 ]
+    //             }
+    //         ];
+
+    //         useEffect(() => {
+    //             const selectedStateData = locations.find(loc => loc.state === selectedState);
+    //             if (selectedStateData) {
+    //                 setLgas(selectedStateData.lga);
+    //                 setSelectedLGA(selectedStateData.lga[0]?.name);
+    //             }
+    //         }, [selectedState]);
+
+    //         useEffect(() => {
+    //             const selectedLGAData = lgas.find(lga => lga.name === selectedLGA);
+    //             if (selectedLGAData) {
+    //                 setWards(selectedLGAData.ward);
+    //                 setSelectedWard(selectedLGAData.ward[0]?.name);
+    //             }
+    //         }, [selectedLGA, lgas]);
+
+    //         useEffect(() => {
+    //             const selectedWardData = wards.find(ward => ward.name === selectedWard);
+    //             if (selectedWardData) {
+    //                 setPollingUnits(selectedWardData.pollingUnit);
+    //                 setSelectedPollingUnit(selectedWardData.pollingUnit[0]);
+    //             }
+    //         }, [selectedWard, wards]);
+
+    // const [currentUnit, setCurrentUnit] = useState("state"); // to determine which dropdown to display
+    // const [selectedUnit, setSelectedUnit] = useState('');   // value of the selected dropdown item
+
+    // const handleRadioChange = (event) => {
+    //     setCurrentUnit(event.target.value);
+    //     setSelectedUnit('');
+    // };
+
+    // const handleDropdownChange = (event) => {
+    //     setSelectedUnit(event.target.value);
+
+    //     switch (currentUnit) {
+    //         case 'state':
+    //             setSelectedState(event.target.value);
+    //             break;
+    //         case 'lga':
+    //             setSelectedLGA(event.target.value);
+    //             break;
+    //         case 'ward':
+    //             setSelectedWard(event.target.value);
+    //             break;
+    //         case 'pollingUnit':
+    //             setSelectedPollingUnit(event.target.value);
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // };
+
+    // const renderDropdownOptions = () => {
+    //     switch (currentUnit) {
+    //         case 'state':
+    //             return locations.map(s => <MenuItem value={s.state} key={s.state}>{s.state}</MenuItem>);
+    //         case 'lga':
+    //             return lgas.map(l => <MenuItem value={l.name} key={l.name}>{l.name}</MenuItem>);
+    //         case 'ward':
+    //             return wards.map(w => <MenuItem value={w.name} key={w.name}>{w.name}</MenuItem>);
+    //         case 'pollingUnit':
+    //             return pollingUnits.map(p => <MenuItem value={p} key={p}>{p}</MenuItem>);
+    //         default:
+    //             return null;
+    //     }
+    // };
+
+    // return (
+    //     <>
+    //         <Box>
+    //             Results
+    //         </Box>
+    //         <Box>
+    //             {JSON.stringify(results)}
+    //         </Box>
+    //     </>
     //   <>
     //     <AppBar position="static" sx={{ backgroundColor: 'green' }}>
     //       <Toolbar>
@@ -436,7 +504,7 @@ function Home() {
     //         </Grid>
     //     </Box>
     //   </>
-    );
+    // );
 }
 
 export default Home;
