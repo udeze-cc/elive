@@ -7,7 +7,7 @@ function ResultTable(props) {
         <Box className="box">
             <Box className='resultform-header'>
             <Typography variant="h4" gutterBottom className='result-header-typo'>
-                Unit Result Preview Form
+                Unit Result Preview
             </Typography>
             </Box>
     
