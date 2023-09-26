@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; 
 import {Grid, Button, Typography, TextField, Box}  from '@mui/material';
 import './App.css';
+import ResultTable from './table';
 
 const saveResult = async (body = {}, admin) => {
   const myHeaders = new Headers();
@@ -25,6 +26,8 @@ function ResultForm() {
   const [electionDate, setElectionDate] = useState('');
   
   const [isPreview, setIsPreview] = useState(false);
+  const [isTableView, setIsTableView] = useState(false);
+  const [results, setResults] = useState({});
   
   const handlePreviewClick = () => {
     setIsPreview(true);
@@ -46,13 +49,16 @@ function ResultForm() {
     // const {partyName, numberOfVotes, pollingLocation, officialId}
     const body = {partyName, voteCount, pollingCentre, officerId, electionDate, electionId};
     saveResult(body, 'udeze.cc@gmail.com')
-    .then(res => {
-      alert(`Form submition is successfully with the following response: ${JSON.stringify(res.json())}`)
+    .then(async res => {
+      const response = await res.json();
+      alert(`Form submition is successfully with the following response: ${JSON.stringify(response)}`);
+      setResults(response);
+      setIsTableView(true);
     })
     .catch(error => console.error(error));
   }
 
-  if (isPreview) {
+  if (isPreview && !isTableView) {
     return (
   <>
     <Box className="box">
@@ -132,8 +138,7 @@ function ResultForm() {
     </Box>
   </>
     );
-  } else {
-
+  } else if (!isTableView) {
   return (
     <Box className='box'>
       <Box className='resultform-header'>
@@ -201,7 +206,13 @@ function ResultForm() {
         </Button>
     </Box>
   );
-}}
+} else if (isTableView) {
+  return (
+    <ResultTable results = {results}/>
+  )
+}
+
+}
 
 export default ResultForm;
 
