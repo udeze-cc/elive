@@ -25,10 +25,10 @@ function AllResultsTable (props) {
             <TableBody>
                 <TableRow>
                     <TableCell>{result.electionId}</TableCell>
-                    <TableCell>{result.pollingCentre}</TableCell>
-                    <TableCell>{result.partyName}</TableCell>
-                    <TableCell>{result.voteCount}</TableCell>
-                    <TableCell>{result.officerId}</TableCell>
+                    <TableCell>{result.electionPollingCentre}</TableCell>
+                    <TableCell>{JSON.stringify(result.electionVotes.votesParties)}</TableCell>
+                    <TableCell>{result.electionVotes.voteTotal}</TableCell>
+                    <TableCell>{result.electionOfficerId}</TableCell>
                     <TableCell>{result.electionDate}</TableCell>
                 </TableRow>
             </TableBody>
@@ -41,7 +41,7 @@ function AllResultsTable (props) {
             <TableRow>
             <TableCell>Election ID</TableCell>
             <TableCell>Polling Centre</TableCell>
-            <TableCell>Party Name</TableCell>
+            <TableCell>Party</TableCell>
             <TableCell>Vote Count</TableCell>
             <TableCell>Officer ID</TableCell>
             <TableCell>Election Date</TableCell>
@@ -54,7 +54,7 @@ function AllResultsTable (props) {
 
 const getResults= async () => {
     const myHeaders = new Headers();
-    const myRequest = new Request(`https://9656mgkl5a.execute-api.eu-west-2.amazonaws.com/dev/fetch/document/Results`, {
+    const myRequest = new Request(`https://9656mgkl5a.execute-api.eu-west-2.amazonaws.com/dev/fetch/document/ElectionResults`, {
       method: "GET",
       headers: myHeaders,
       mode: "cors",

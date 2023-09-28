@@ -174,8 +174,9 @@ function AdminPage() {
             <CssBaseline />
             <AppBar position="fixed" open={open} sx={{ bgcolor: 'green' }}>
                 <Toolbar>
+                <a style={{textDecoration: "none", color: "white", marginRight: "20px"}} href="/"><Typography variant="h6">Home</Typography></a>
                     <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                        E-lections AdminPage
+                         AdminPage
                     </Typography>
                     <IconButton
                         color="inherit" // changed to inherit so it takes color from parent AppBar
