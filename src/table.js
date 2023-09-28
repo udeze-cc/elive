@@ -1,13 +1,13 @@
 import { Table, Box, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 
 function ResultTable(props) {
-    const { partyName, voteCount, pollingCentre, officerId, electionId, electionDate } = props.results;
+    const { partyName, voteCount, pollingCentre, officerId, electionId, electionDate } = props.results ? props.results : {};
     return (
         <>
         <Box className="box">
             <Box className='resultform-header'>
             <Typography variant="h4" gutterBottom className='result-header-typo'>
-                Unit Result Preview Form
+                Unit Result Preview
             </Typography>
             </Box>
     
