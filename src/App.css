@@ -57,7 +57,7 @@
     display: flex;
     flex-direction: column;
     align-items: justify;
-    padding: 50px;
+    padding: 20px;
     padding-top: 10px;
 }
 
@@ -173,10 +173,10 @@
 }
 
  .resultform-header {
-  margin: 2.0em;
+  margin: 1.0em;
   display: flex;
   flex-direction: column; 
-  align-self: center;
+  align-content: center;
  }
 .component-typography {
   margin: 2.0em; 
@@ -200,14 +200,25 @@
   align-content: center;
 }
 
-.declaration {
-  display: flex; 
-  flex-direction: column; 
-  align-items: center;
-}
-
 .result-input {
   padding: 1.0em;
   font-weight: bold !important;
 }
 
+.election-parties{
+  padding-left: 2.0em;
+  font-weight: bold !important;
+}
+
+.parties-cell {
+  font-weight: bold !important;
+}
+
+.preview-cell {
+  font-size: larger;
+  font-weight: bold !important;
+}
+
+.party-input {
+  padding: 3.0em;
+}

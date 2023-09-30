@@ -39,6 +39,22 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "elivefe6a2e85"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
     }
   },
   "function": {
