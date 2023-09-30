@@ -32,5 +32,93 @@
         }
       }
     }
+  },
+  "working": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-elive-working-05751-authRole",
+      "UnauthRoleArn": "arn:aws:iam::651573038802:role/amplify-elive-working-05751-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::651573038802:role/amplify-elive-working-05751-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-elive-working-05751-deployment",
+      "UnauthRoleName": "amplify-elive-working-05751-unauthRole",
+      "StackName": "amplify-elive-working-05751",
+      "StackId": "arn:aws:cloudformation:eu-west-2:651573038802:stack/amplify-elive-working-05751/d7054b20-5e5a-11ee-aeca-02980543d0ea",
+      "AmplifyAppId": "duxpw7mnuzntb",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-elive-working-05751-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "elivefe6a2e85": {}
+      }
+    }
+  },
+  "beta": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-elive-beta-172703-authRole",
+      "UnauthRoleArn": "arn:aws:iam::529064899164:role/amplify-elive-beta-172703-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::529064899164:role/amplify-elive-beta-172703-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-elive-beta-172703-deployment",
+      "UnauthRoleName": "amplify-elive-beta-172703-unauthRole",
+      "StackName": "amplify-elive-beta-172703",
+      "StackId": "arn:aws:cloudformation:eu-west-2:529064899164:stack/amplify-elive-beta-172703/32c19640-5fae-11ee-967e-0a51ca608274",
+      "AmplifyAppId": "d39h2gkax6hqox",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-elive-beta-172703-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "elivefe6a2e85": {}
+      },
+      "function": {
+        "elivefe6a2e85CustomMessage": {
+          "REDIRECTURL": "/dashboard",
+          "EMAILSUBJECT": "E-lections",
+          "EMAILMESSAGE": "Your Account with E-lections have been successfully created. Thank you for joining us.",
+          "deploymentBucketName": "amplify-elive-beta-172703-deployment",
+          "s3Key": "amplify-builds/elivefe6a2e85CustomMessage-3551656834784f673250-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d39h2gkax6hqox",
+          "type": "manual"
+        }
+      }
+    }
+  },
+  "live": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-elive-live-175221-authRole",
+      "UnauthRoleArn": "arn:aws:iam::529064899164:role/amplify-elive-live-175221-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::529064899164:role/amplify-elive-live-175221-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-elive-live-175221-deployment",
+      "UnauthRoleName": "amplify-elive-live-175221-unauthRole",
+      "StackName": "amplify-elive-live-175221",
+      "StackId": "arn:aws:cloudformation:eu-west-2:529064899164:stack/amplify-elive-live-175221/bb95f080-5fb1-11ee-a1f2-06507a04935c",
+      "AmplifyAppId": "d39h2gkax6hqox",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-elive-live-175221-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "elivefe6a2e85": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "elivefe6a2e85CustomMessage": {
+          "REDIRECTURL": "/",
+          "EMAILSUBJECT": "",
+          "EMAILMESSAGE": "",
+          "deploymentBucketName": "amplify-elive-live-175221-deployment",
+          "s3Key": "amplify-builds/elivefe6a2e85CustomMessage-3551656834784f673250-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d39h2gkax6hqox",
+          "type": "manual"
+        }
+      }
+    }
   }
 }

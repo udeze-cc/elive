@@ -19,8 +19,14 @@ function AllResultsTable(props) {
         "electionLga": "LGA",
         "electionState": "State",
         "electionFederal": "Country",
-        "electionVotes.voteTotal": "Total Votes",
+        "electionVotes.voteTotal": "Total Votes",        
     };
+
+    const additionalAttributes = Array.isArray(props.data.keys) ? props.data.keys : [];
+    additionalAttributes.forEach(attribute => {
+        const [key, category] = attribute.split('_');
+        attributeToLabelMapping[attribute] = `${category.replace('election', '').replace(/([A-Z])/g, ' $1')} Result ID`;
+    });
 
     const parties = props.data.electionVotes && props.data.electionVotes.votesParties 
     ? props.data.electionVotes.votesParties.map(party => {
@@ -33,6 +39,7 @@ function AllResultsTable(props) {
         
     const rows = [
         "electionResultKey",
+        ...additionalAttributes,
         "electionId",
         "electionPollingCentre",
         "electionOfficerId",
@@ -91,7 +98,7 @@ function AllResultsTable(props) {
                     >
                         <CartesianGrid stroke="#f5f5f5" />
                         <XAxis type="number" tick={{ fontWeight: 'bold' }} />
-                        <YAxis dataKey="name" type="category" tick={{ fontWeight: 'bold' }} />
+                        <YAxis dataKey="name" type="category" scale="band" tick={{ fontWeight: 'bold' }} />
                         <Legend fontWeight={900}/>
                         <Bar 
                             dataKey="voteCount" 
@@ -113,9 +120,6 @@ const BASE_URL = 'https://9656mgkl5a.execute-api.eu-west-2.amazonaws.com/dev/fet
 const pollingCenters = [ 'City Centre', 'Secretariat', 'Waterside', 'Market Square' ];
 
 const getPollingCentres = async () => {
-    // const response = await fetch(`${BASE_URL}/ElectionResults`);
-    // const data = await response.json();
-    // return data._resultList;
     const response = await fetch(`${BASE_URL}/ElectionResults`);
     const data = await response.json();
     return data._resultList.filter(result => pollingCenters.includes(result.electionPollingCentre));
@@ -164,10 +168,6 @@ class Home extends React.Component {
     renderDropdownOptions() {
         if (!this.state.activeCategory) return null;
     
-    // const uniqueUnits = [...new Set(this.state.results.map(result => result[this.state.activeCategory]))];
-    // return uniqueUnits.map(unit => <option key={unit} value={unit}>{unit}</option>);
-        // if (!this.state.activeCategory) return null;
-    
         const uniqueUnits = [...new Set(this.state.results.map(result => result[this.state.activeCategory]))];
         return uniqueUnits.map(unit => <option key={unit} value={unit}>{unit}</option>);
     }
@@ -198,11 +198,55 @@ class Home extends React.Component {
     }
 }
 
+// fetchDataForUnit(unit) {
+//     const relatedData = this.state.results.find(result => result[this.state.activeCategory] === unit);
+    
+//     if (relatedData) {
+//         this.setState({ data: relatedData });
+//     } else {
+//         this.setState({ data: {} });
+//     }
+// }
+
 fetchDataForUnit(unit) {
     const relatedData = this.state.results.find(result => result[this.state.activeCategory] === unit);
     
     if (relatedData) {
-        this.setState({ data: relatedData });
+        const data = { ...relatedData, keys: {} };
+
+        if (this.state.activeCategory === 'electionState') {
+            const lgaData = this.state.results.find(result => result.electionLga === relatedData.electionLga);
+            const wardData = this.state.results.find(result => result.electionWard === relatedData.electionWard);
+            const pollingCentreData = this.state.results.find(result => result.electionPollingCentre === relatedData.electionPollingCentre);
+            
+            data.keys = {
+                [`electionResultKey_${lgaData.electionLga}`]: lgaData ? lgaData.electionResultKey : null,
+                [`electionResultKey_${wardData.electionWard}`]: wardData ? wardData.electionResultKey : null,
+                [`electionResultKey_${pollingCentreData.electionPollingCentre}`]: pollingCentreData ? pollingCentreData.electionResultKey : null
+            };
+        }
+
+        if (this.state.activeCategory === 'electionLGA') {
+            const wardData = this.state.results.find(result => result.electionWard === relatedData.electionWard);
+            const pollingCentreData = this.state.results.find(result => result.electionPollingCentre === relatedData.electionPollingCentre);
+
+            data.keys = {
+                [`electionResultKey_${wardData.electionWard}`]: wardData ? wardData.electionResultKey : null,
+                [`electionResultKey_${pollingCentreData.electionPollingCentre}`]: pollingCentreData ? pollingCentreData.electionResultKey : null
+            };
+        }
+
+        if (this.state.activeCategory === 'electionWard') {
+            const pollingCentreData = this.state.results.find(result => result.electionPollingCentre === relatedData.electionPollingCentre);
+            
+            data.keys = {
+                [`electionResultKey_${pollingCentreData.electionPollingCentre}`]: pollingCentreData ? pollingCentreData.electionResultKey : null
+            };
+        }
+
+        // No need to add additional keys for electionPollingCentre as it's the lowest hierarchy
+
+        this.setState({ data });
     } else {
         this.setState({ data: {} });
     }
